@@ -1,17 +1,59 @@
-#name: Docker
-#
-#on:
- # push:
-  #  branches: [ master ]
-#
-#jobs:
- # docker:
-#
- #   runs-on: ubuntu-latest
-#
- #   name: build-and-push-docker-images
-#
- #   steps: 
-  #  - 
-#
-##
+name: docker ci
+
+on:
+  push:
+    branches:
+      - 'master'
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      -
+        name: Login to DockerHub
+        uses: docker/login-action@v1 
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - 
+        name: Declare some variables
+        id: vars
+        shell: bash
+        run: |
+          echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
+      -
+        name: Build and push app
+        id: docker_build_app
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          tags: jpajoyl/astea_app:latest,jpajoyl/astea_app:${{ steps.vars.outputs.sha_short }}
+          context: app
+      -
+        name: Build and push database
+        id: docker_build_database
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          tags: jpajoyl/astea_database:latest,jpajoyl/astea_database:${{ steps.vars.outputs.sha_short }}
+          context: database
+      -
+        name: Build and push payment
+        id: docker_build_payment
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          tags: jpajoyl/astea_payment:latest,jpajoyl/astea_payment:${{ steps.vars.outputs.sha_short }}
+          context: payment_gateway
+      -
+        name: Build and push proxy
+        id: docker_build_proxy
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          tags: jpajoyl/astea_proxy:latest,jpajoyl/astea_proxy:${{ steps.vars.outputs.sha_short }}
+          context: reverse_proxy
