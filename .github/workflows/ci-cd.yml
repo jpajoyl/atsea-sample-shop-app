@@ -111,4 +111,4 @@ jobs:
           key: ${{ secrets.EC2_KEY }}
           script: |
             sudo docker swarm init
-            sudo docker-compose up --build
+            sudo docker stack deploy --compose-file docker-compose.yml atsea
