@@ -24,6 +24,8 @@ jobs:
         id: vars
         run: |
           echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
+      - name: Check commit SHA
+        run: echo ${{ steps.vars.outputs.sha_short }}
       -
         name: Build and push app
         id: docker_build_app
