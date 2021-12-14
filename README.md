@@ -54,4 +54,4 @@ The URL for the content is `http://localhost:8080/`
 Documentation for REST calls: [REST API](./REST.md)
 
 
-made by jpajoyl and svalenciaz
+made by jpajoyl and svalenciaz final
