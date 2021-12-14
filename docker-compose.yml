@@ -3,6 +3,8 @@ version: "3.3"
 services:
   reverse_proxy:
     image: jpajoyl/astea_proxy
+    depends_on:
+      - appserver
     ports:
       - "80:80"
       - "443:443"
