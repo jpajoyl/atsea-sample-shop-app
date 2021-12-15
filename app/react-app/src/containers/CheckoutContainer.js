@@ -59,7 +59,7 @@ class CheckoutContainer extends Component {
       .then(this.handleSuccess)
       // error: status 404
       .catch((err) => {
-        throw new SubmissionError({ _error: "Please login before completing order..." })
+        throw new SubmissionError({ _error: "Please login before completing o..." })
       })
   }
 
